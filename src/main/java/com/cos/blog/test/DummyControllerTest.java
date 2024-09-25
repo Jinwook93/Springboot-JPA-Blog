@@ -11,11 +11,15 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.UserRepository;
+
+import jakarta.transaction.Transactional;
 
 @RestController
 public class DummyControllerTest {
@@ -85,4 +89,25 @@ public class DummyControllerTest {
 		userRepository.save(user);
 		return "회원가입이 완료되었습니다";
 	}
+	//email,password 수정
+	//save함수는 id를 전달하지 않으면 insert를 해주고
+	//save함수는 id전달시 해당 id에 대한 데이터가 있으면 update
+	//save함수는 id전달시 해당 id에 대한 데이터가 없으면 insert
+	@Transactional			//함수 종료시 자동으로 commit 됨 
+	@PutMapping("/dummy/user/{id}")
+	public User updateUser(@PathVariable int id, @RequestBody User requestUser) {
+		System.out.println("id :" +id );
+		System.out.println("password :" +requestUser.getPassword() );
+		System.out.println("email :" +requestUser.getEmail() );
+		
+		User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("수정에 실패하였습니다"));
+		//변경 감지 (Dirty Checking)
+		//영속성 컨텍스트는 엔티티의 상태 변화를 감지하여 트랜잭션이 커밋되기 전에 변경된 내용을 데이터베이스에 자동으로 반영합니다. 이를 **변경 감지(Dirty Checking)**라고 합니다.
+		user.setEmail(requestUser.getEmail());
+		user.setPassword(requestUser.getPassword());
+		//userRepository.save(user);		
+		
+		return null;
+	}
+	
 }
