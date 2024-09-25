@@ -4,10 +4,12 @@ import java.util.List;
 import java.util.function.Supplier;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -107,7 +109,20 @@ public class DummyControllerTest {
 		user.setPassword(requestUser.getPassword());
 		//userRepository.save(user);		
 		
-		return null;
+		return user;
 	}
+	@DeleteMapping("/dummy/user/{id}")
+	public String deleteUser(@PathVariable int id) {
 	
+		try {
+		userRepository.deleteById(id);
+		}catch (EmptyResultDataAccessException e) {
+			return "삭제에 실패하였습니다 해당 id는 DB에 없습니다";
+		}
+		
+		//User user = userRepository.findById(id).orElseThrow(() -> new IllegalArgumentException("삭제에 실패하였습니다"));
+		//userRepository.delete(user);
+
+		return "삭제되었습니다. id : "+id;
+	}
 }
