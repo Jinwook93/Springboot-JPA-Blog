@@ -25,8 +25,9 @@ repositories {
 
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	
 	compileOnly 'org.projectlombok:lombok'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'com.mysql:mysql-connector-j'
@@ -37,12 +38,13 @@ dependencies {
 	//JSP 템플릿 엔진 (스프링은 기본적으로 JSP를 제공해주지 않는다)
 	// https://mvnrepository.com/artifact/org.apache.tomcat/tomcat-jasper
 	implementation group: 'org.apache.tomcat', name: 'tomcat-jasper', version: '10.1.25'
-	//시큐리티 태그 라이브러리
+			//시큐리티 태그 라이브러리
 	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-taglibs
-//implementation group: 'org.springframework.security', name: 'spring-security-taglibs', version: '4.0.4.RELEASE'
+	implementation group: 'org.springframework.security', name: 'spring-security-taglibs', version: '6.1.5'
 	//JSTL
 	// https://mvnrepository.com/artifact/jakarta.servlet.jsp.jstl/jakarta.servlet.jsp.jstl-api
-implementation group: 'jakarta.servlet.jsp.jstl', name: 'jakarta.servlet.jsp.jstl-api', version: '3.0.0'
+	implementation group: 'jakarta.servlet.jsp.jstl', name: 'jakarta.servlet.jsp.jstl-api', version: '3.0.0'
+	implementation group: 'org.glassfish.web', name: 'jakarta.servlet.jsp.jstl', version: '3.0.0'
 	
 	
 }
