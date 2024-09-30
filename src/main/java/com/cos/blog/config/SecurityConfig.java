@@ -44,7 +44,8 @@ public class SecurityConfig {
                 .requestMatchers(new AntPathRequestMatcher("/**/*.jsp")).permitAll()
                 .requestMatchers(
                     new AntPathRequestMatcher("/"),
-                    new AntPathRequestMatcher("/auth/**"), 
+                    new AntPathRequestMatcher("/auth/**"),
+                    new AntPathRequestMatcher("/dummy/**"), 
                     new AntPathRequestMatcher("/js/**"),
                     new AntPathRequestMatcher("/css/**"),
                     new AntPathRequestMatcher("/image/**")).permitAll()

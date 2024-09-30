@@ -68,7 +68,7 @@ public class DummyControllerTest {
 		
 	
 	@GetMapping("/dummy/user/page")
-	public List<User>pageList(@PageableDefault(size = 2,sort = "id",direction = Direction.DESC)Pageable pageable){
+	public Page<User>pageList(@PageableDefault(size = 2,sort = "id",direction = Direction.DESC)Pageable pageable){
 		Page <User> pagingusers =  userRepository.findAll(pageable);
 		if (pagingusers.isFirst()) {
 			//첫 번쨰로 올경우의 옵션
@@ -77,7 +77,7 @@ public class DummyControllerTest {
 			//마지막으로 출력되는 경우의 옵션
 		}
 		List<User> users  = pagingusers.getContent();
-		return users;
+		return pagingusers;
 	}
 	
 	//http://localhost:8081/blog/dummy/join(요청)
