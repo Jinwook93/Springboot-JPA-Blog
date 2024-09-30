@@ -36,7 +36,7 @@ public class Board {
 	@Lob //대용량 데이터
 	private String content; //섬머노트 라이브러리 <html>태그가 섞여서 디자인이 됨
 	
-	@ColumnDefault("0")
+	//@ColumnDefault("0")			안 쓸 예정. 직접 만듬
 	private int count;
 	
 	@ManyToOne(fetch = FetchType.EAGER) 	//Many: Board, User : One			//FetchType.EAGER: 무조건 즉시 들고 와라
