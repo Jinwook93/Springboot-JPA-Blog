@@ -13,10 +13,6 @@
   <label for="content">content:</label>
   <textarea class="form-control summernote" rows="5" id="content"></textarea>
 
-<!--   <div class="form-group form-check"> -->
-<!--     <label class="form-check-label"> -->
-<!--       <input class="form-check-input"  name = "remember" type="checkbox"> Remember me -->
-<!--     </label> -->
 
   </div>
 

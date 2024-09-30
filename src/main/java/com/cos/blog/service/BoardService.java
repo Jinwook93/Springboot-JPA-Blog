@@ -9,6 +9,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import com.cos.blog.model.Board;
 import com.cos.blog.model.RoleType;
@@ -63,6 +64,30 @@ public class BoardService {
 	    // 존재한다면 삭제 수행
 	    boardRepository.delete(board);
 	}
+
+	@Transactional
+	public void updateBoard(int boardid, Board requestboard) {
+	    // 영속화된 board 객체를 찾음
+	    Board board = boardRepository.findById(requestboard.getId()).orElseThrow(
+	            () -> new IllegalArgumentException("수정 실패: 아이디를 찾을 수 없습니다"));
+
+	    // 영속화된 board 객체의 필드 값을 직접 수정
+	    board.setTitle(requestboard.getTitle());
+	    board.setContent(requestboard.getContent());
+
+//  TroubleShooting	    
+//	    빌더 패턴은 객체 생성 시 유용하지만, 영속화된 객체의 수정에는 적합하지 않습니다. 
+//	    더티 체킹을 이용하려면 영속화된 객체의 필드를 직접 수정해야 합니다. 
+//	    JPA의 더티 체킹은 영속성 컨텍스트에 등록된 객체의 필드 값이 변경된 것을 감지하고, 
+//	    트랜잭션이 종료될 때 DB에 반영하는 방식이기 때문에 영속화된 객체에서 직접 수정이 이루어져야 합니다.
+//	    board.builder().title(requestboard.getTitle()).content(requestboard.getContent()).build(); 는 사용할 수 없다
+	        
+		//해당 함수로 종료시 트랜젝션이 종료된다. 이 떄 더티체킹-자동업데이트 됨 db-flush
+	}
+	
+
+	
+	
 
 
 }

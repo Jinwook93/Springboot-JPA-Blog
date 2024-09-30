@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.cos.blog.config.auth.PrincipalDetail;
@@ -39,5 +40,10 @@ public class BoardApiController {
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
 		
 	}
-	
+	@PutMapping("/api/board/{id}")
+	public ResponseDTO<Integer> update(@PathVariable int id , @RequestBody Board board){
+		boardService.updateBoard(id,board);
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
+		
+	}
 }

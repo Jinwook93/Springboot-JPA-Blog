@@ -29,6 +29,8 @@ public class BoardController {
 		return "board/detail";
 	}
 	
+	
+	
 	@GetMapping({"", "/"})		
 	public String index(Model model, @PageableDefault(size = 3, sort = "id", direction = Direction.DESC) Pageable pageable) {
 		
@@ -72,6 +74,11 @@ Page<Board> boardList = boardService.boardList(pageable);
 		return "index";
 	}
 
+	@GetMapping("/board/{boardid}/updateForm")
+	public String updateForm(@PathVariable int boardid, Model model) {
+		model.addAttribute("board", boardService.boardDetail(boardid));
+		return "board/updateForm";
+	}
 	
 	@GetMapping("/board/saveForm")		
 	public String saveForm() {
