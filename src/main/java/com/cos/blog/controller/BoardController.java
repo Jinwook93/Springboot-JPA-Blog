@@ -9,6 +9,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import com.cos.blog.config.auth.PrincipalDetail;
 import com.cos.blog.model.Board;
 import com.cos.blog.service.BoardService;
@@ -18,6 +19,15 @@ public class BoardController {
 
 	@Autowired
 	private BoardService boardService;
+	
+	
+	//게시글 정보 보기
+	@GetMapping("/board/{boardid}")		
+	public String detailForm(Model model, @PathVariable int boardid) {
+
+		model.addAttribute("board", boardService.boardDetail(boardid));
+		return "board/detail";
+	}
 	
 	@GetMapping({"", "/"})		
 	public String index(Model model, @PageableDefault(size = 3, sort = "id", direction = Direction.DESC) Pageable pageable) {

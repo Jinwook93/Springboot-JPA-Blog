@@ -10,7 +10,7 @@
     <input type="text" class="form-control" placeholder="Enter title" id="title">
   </div>
   <div class="form-group">
-  <label for="context">context:</label>
+  <label for="content">content:</label>
   <textarea class="form-control summernote" rows="5" id="content"></textarea>
 
 <!--   <div class="form-group form-check"> -->

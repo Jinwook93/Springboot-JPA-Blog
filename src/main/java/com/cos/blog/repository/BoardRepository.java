@@ -14,5 +14,6 @@ import java.util.Optional;
 //자동으로 bean 등록가능
 //@Repository		 // 생략가능
 public interface BoardRepository extends JpaRepository<Board, Integer>{
-	
+	Optional<Board> findById(int id);
+	Optional<Board> deleteById(int id);
 }
