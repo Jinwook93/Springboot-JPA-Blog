@@ -19,7 +19,10 @@ public class UserController {
 		return "user/loginForm";
 	}
 	
-	
+	@GetMapping("/user/updateForm")
+	public String updateForm() {
+		return "user/updateForm";
+	}
 /*	수정 전
 	@GetMapping("/user/joinForm")
 	public String joinForm() {
