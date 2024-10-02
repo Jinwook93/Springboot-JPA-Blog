@@ -16,7 +16,8 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 	
 	//SELECT * FROM user WHERE username =1?;
 	Optional<User> findByUsername(String username);
-	
+	User findByEmail(String email);
+
 	//=========스프링 시큐리티 사용 전================
 	
 	

@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 //ORM -> Java(다른 언어) Object -> 테이블로 매핑해주는 기술
@@ -20,18 +21,22 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 //@DynamicInsert			//insert 시 null인 부분은 제외시켜준다	//Dynamicinsert를 안 쓰고 다른 방식으로 기능을 처리할 것임
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)//프로젝트에서 연결된 DB의 넘버링 전략을 따라간다
 	private int id ; //시퀀스, auto_increment
-	@Column(nullable=false, length=30, unique=true)
+	@Column(nullable=false, length=100, unique=true)
 	private String username; //아이디
 	@Column(nullable=false, length=100)	//해쉬된 비밀번호 떄문에 넉넉히 100으로 줬다.
 	private String password;
 	@Column(nullable=false, length=30)
 	private String email;
+	
+	private String oauth;	// 카카오일 경우, kakao , 구글일 경우에는 google, 일반일떄는 아무값도 안뜨게 할 것임
+	
 	
 	@ColumnDefault("'user'")
 	//private String role; //Enum을 쓰는 것이 좋다	

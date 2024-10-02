@@ -1,5 +1,7 @@
 package com.cos.blog.service;
 
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -10,6 +12,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.cos.blog.model.KakaoProfile;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.UserRepository;
@@ -42,12 +46,13 @@ public class UserService {
 		// 영속화된 오브젝트를 변경하면 자동으로 DB에 update문을 날려준다
 		User updatedUser = userRepository.findById(user.getId()).orElseThrow(()-> new IllegalArgumentException("수정할 회원정보가 존재하지 않습니다"));
 	
-		
+		// Validate 체크 => oauth 필드에 값이 없으면 수정 가능
+		if(updatedUser.getOauth() == null || updatedUser.getOauth().equals("")) {
 		String rawPassword = user.getPassword();
 		String encPassword = encoder.encode(rawPassword);
 		updatedUser.setPassword(encPassword);
 		updatedUser.setEmail(user.getEmail());
-		
+		}
 	    // 변경된 사용자 정보를 세션에 반영
 	    Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(),user.getPassword()));
 
@@ -67,11 +72,57 @@ public class UserService {
 		String encPassword = encoder.encode(rawPassword);
 		user.setPassword(encPassword);
 		user.setRole(RoleType.USER);
-		userRepository.save(user);
+	//	userRepository.save(user);
+
 	
 	}
 	
+	
+	@Transactional(readOnly = true)		
+	public User findMember(String username) {				
+		User user =userRepository.findByUsername(username).orElseGet(() -> new User());
+		return user;
+	}
+	
+//		//오버로딩 (시험 삼아 만들어 봄)
+//	@Transactional
+//	public void joinMember(KakaoProfile kakaoProfile) {
+//	    // 카카오 이메일 정보 추출
+//	    String email = kakaoProfile.getKakao_account().getEmail();
+//
+//	    // email을 사용해 기존 회원 여부 확인
+//	    User existingUser = userRepository.findByEmail(email);
+//
+//	    if (existingUser == null) {
+//	        // 회원이 존재하지 않으면 자동 회원가입 진행
+//	        System.out.println("기존 회원이 아니기에 자동 회원가입을 진행합니다");
+//
+//	        // 임시 패스워드 생성
+//	        UUID garbagePassword = UUID.randomUUID();
+//	        User user = User.builder()
+//	                .username(kakaoProfile.getProperties().getNickname())
+//	                .email(email)
+//	                .password(garbagePassword.toString())
+//	                .build();
+//
+//	        // 패스워드 암호화
+//	        String rawPassword = user.getPassword();
+//	        String encPassword = encoder.encode(rawPassword);
+//	        user.setPassword(encPassword);
+//
+//	        // 권한 설정
+//	        user.setRole(RoleType.USER);
+//
+//	        // 회원 정보 저장
+//	        userRepository.save(user);
+//	    } else {
+//	        // 회원이 이미 존재하는 경우
+//	        System.out.println("해당 이메일로 이미 가입된 회원이 있습니다: " + existingUser.getUsername());
+//	    }
+//	}
 
+	
+	
 	
 	/*   수정 전
 	public int joinMember(User user) {				

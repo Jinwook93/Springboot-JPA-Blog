@@ -17,6 +17,9 @@
 <!--     </label> -->
   </div>
    <button id ="btn-login"  class="btn btn-primary">로그인</button> 			<!--  폼 로그인을 사용할 것이므로 form 안에 집어넣었다 -->
+   <a href ="https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=09ee75cc50e5c24cc8624691de8fe75a&redirect_uri=http://localhost:8081/auth/kakao/callback">
+   <img height ="38px" src ="/image/kakao_login_medium.png"/>
+   </a>
 </form>
 <!--    <button id ="btn-login"  class="btn btn-primary">로그인</button> -->
  
