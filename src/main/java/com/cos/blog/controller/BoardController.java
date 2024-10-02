@@ -10,8 +10,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+
 import com.cos.blog.config.auth.PrincipalDetail;
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.service.BoardService;
 
 @Controller
@@ -85,6 +89,8 @@ Page<Board> boardList = boardService.boardList(pageable);
 		// /WEB-INF/views/board/saveForm
 		return "board/saveForm";
 	}
+	
+
 	
 //	@GetMapping({"", "/"})		
 //	public String index(@AuthenticationPrincipal PrincipalDetail principalDetail) {

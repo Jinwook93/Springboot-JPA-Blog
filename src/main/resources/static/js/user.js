@@ -36,7 +36,11 @@ let index = {
 			dataType: "json"	//요청을 서버로 해서 응답이 나왔을 떄 기본적으로 모든 것이 문자열 (생긴게 json이라면) => javascriptObject로 바꿔준다.
 			//dataType을 생략 했을 경우 jquery가 MIME 타입을 확인하고 자동으로 결정 
 		}).done(function(resp) {
+			if(resp.status ===500){
+					alert("회원가입에 실패했습니다");
+			}else{
 			alert("회원가입이 완료되었습니다");
+			}
 			//	alert(resp);
 			console.log(data);
 			console.log(resp);

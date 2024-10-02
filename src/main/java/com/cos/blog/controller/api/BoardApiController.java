@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import com.cos.blog.config.auth.PrincipalDetail;
+import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.dto.ResponseDTO;
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.service.BoardService;
@@ -26,6 +28,8 @@ public class BoardApiController {
 
 	@Autowired
 	BoardService boardService;
+	
+	
 	
 	@PostMapping("/auth/board")
 	public ResponseDTO<Integer> save(@RequestBody Board board,@AuthenticationPrincipal PrincipalDetail principalDetail) {
@@ -45,5 +49,25 @@ public class BoardApiController {
 		boardService.updateBoard(id,board);
 		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
 		
+	}
+	
+	// 데이터를 받을 때에는 컨트롤러에서 dto를 만들어서 하는 것을 권장
+	//DTO 수정 후
+	@PostMapping("/api/board/{boardId}/reply")
+	public ResponseDTO<Integer> replySave(@RequestBody ReplySaveRequestDto replySaveRequestDto) {
+		boardService.ReplyWrite(replySaveRequestDto);
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
+	}
+	//DTO 수정 전
+//	@PostMapping("/api/board/{boardId}/reply")
+//	public ResponseDTO<Integer> replySave(@PathVariable int boardId, @RequestBody Reply reply,  @AuthenticationPrincipal PrincipalDetail principalDetail) {
+//		boardService.ReplyWrite(principalDetail.getUser(),boardId,reply);
+//		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
+//	}
+
+	@DeleteMapping("/api/board/{boardId}/reply/{replyId}")
+	public ResponseDTO<Integer> replyDelete(@PathVariable int replyId) {
+		boardService.ReplyDelete(replyId);
+		return new ResponseDTO<Integer>(HttpStatus.OK.value(), 1);
 	}
 }

@@ -11,69 +11,77 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.cos.blog.dto.ReplySaveRequestDto;
 import com.cos.blog.model.Board;
+import com.cos.blog.model.Reply;
 import com.cos.blog.model.RoleType;
 import com.cos.blog.model.User;
 import com.cos.blog.repository.BoardRepository;
+import com.cos.blog.repository.ReplyRepository;
 import com.cos.blog.repository.UserRepository;
-
 
 //스프링이 컴포넌트 스캔을 통해 Bean에 등록을 해줌. IoC를 해준다.
 @Service
 public class BoardService {
-	
+
 	@Autowired
 	private BoardRepository boardRepository;
 
-	@Transactional		//일을 처리하는 단위, 하나의 서비스가 하나의 트랜젝션을 가지기도 하지만 두개 이상의 복합적인 서비스를
-	//하나의 트랜젝션으로 묶을 수도 있다.
-	//성공이 되면 commit,실패가되면 rollback이 되는 코드 짜야함
-	public void boardWrite(Board board, User user) {			//title, content
-			board.setCount(0);
-			board.setUser(user);
-			boardRepository.save(board);
+	@Autowired
+	private ReplyRepository replyRepository;
+
+	@Autowired
+	private UserRepository userRepository;
+
+	@Transactional // 일을 처리하는 단위, 하나의 서비스가 하나의 트랜젝션을 가지기도 하지만 두개 이상의 복합적인 서비스를
+	// 하나의 트랜젝션으로 묶을 수도 있다.
+	// 성공이 되면 commit,실패가되면 rollback이 되는 코드 짜야함
+	public void boardWrite(Board board, User user) { // title, content
+		board.setCount(0);
+		board.setUser(user);
+		boardRepository.save(board);
 	}
 
-@Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	public Page<Board> boardList(Pageable pageable) {
-	
+
 		return boardRepository.findAll(pageable);
 	}
 
-@Transactional(readOnly = true)
+	@Transactional(readOnly = true)
 	public Board boardDetail(int boardid) {
-	return 	boardRepository.findById(boardid).orElseThrow(
-				new Supplier<IllegalArgumentException>() {
+		return boardRepository.findById(boardid).orElseThrow(new Supplier<IllegalArgumentException>() {
 
-					@Override
-					public IllegalArgumentException get() {
-						return new IllegalArgumentException("글 상세보기 실패 : 아이디를 찾을 수 없습니다");
-					}
-					
-				});
-		
+			@Override
+			public IllegalArgumentException get() {
+				return new IllegalArgumentException("글 상세보기 실패 : 아이디를 찾을 수 없습니다");
+			}
+
+		});
+
 	}
-	
+
 	@Transactional
 	public void boardDelete(int boardid) {
-	    // 먼저 게시글이 존재하는지 확인
-	    Board board = boardRepository.findById(boardid)
-	        .orElseThrow(() -> new IllegalArgumentException("삭제 실패 : 아이디를 찾을 수 없습니다"));
-	  //orElseThrow는 findById()와 같이 Optional 객체를 반환하는 메서드에서 사용할 수 있으며, deleteById()와 같이 반환값이 없는 메서드에서는 사용할 수 없습니다
-	    
-	    // 존재한다면 삭제 수행
-	    boardRepository.delete(board);
+		// 먼저 게시글이 존재하는지 확인
+		Board board = boardRepository.findById(boardid)
+				.orElseThrow(() -> new IllegalArgumentException("삭제 실패 : 아이디를 찾을 수 없습니다"));
+		// orElseThrow는 findById()와 같이 Optional 객체를 반환하는 메서드에서 사용할 수 있으며, deleteById()와
+		// 같이 반환값이 없는 메서드에서는 사용할 수 없습니다
+
+		// 존재한다면 삭제 수행
+		boardRepository.delete(board);
 	}
 
 	@Transactional
 	public void updateBoard(int boardid, Board requestboard) {
-	    // 영속화된 board 객체를 찾음
-	    Board board = boardRepository.findById(requestboard.getId()).orElseThrow(
-	            () -> new IllegalArgumentException("수정 실패: 아이디를 찾을 수 없습니다"));
+		// 영속화된 board 객체를 찾음
+		Board board = boardRepository.findById(requestboard.getId())
+				.orElseThrow(() -> new IllegalArgumentException("수정 실패: 아이디를 찾을 수 없습니다"));
 
-	    // 영속화된 board 객체의 필드 값을 직접 수정
-	    board.setTitle(requestboard.getTitle());
-	    board.setContent(requestboard.getContent());
+		// 영속화된 board 객체의 필드 값을 직접 수정
+		board.setTitle(requestboard.getTitle());
+		board.setContent(requestboard.getContent());
 
 //  TroubleShooting	    
 //	    빌더 패턴은 객체 생성 시 유용하지만, 영속화된 객체의 수정에는 적합하지 않습니다. 
@@ -81,13 +89,48 @@ public class BoardService {
 //	    JPA의 더티 체킹은 영속성 컨텍스트에 등록된 객체의 필드 값이 변경된 것을 감지하고, 
 //	    트랜잭션이 종료될 때 DB에 반영하는 방식이기 때문에 영속화된 객체에서 직접 수정이 이루어져야 합니다.
 //	    board.builder().title(requestboard.getTitle()).content(requestboard.getContent()).build(); 는 사용할 수 없다
-	        
-		//해당 함수로 종료시 트랜젝션이 종료된다. 이 떄 더티체킹-자동업데이트 됨 db-flush
+
+		// 해당 함수로 종료시 트랜젝션이 종료된다. 이 떄 더티체킹-자동업데이트 됨 db-flush
 	}
 	
-
 	
-	
+	@Transactional	//Native Query 사용 (ReplyRepository)
+	public void ReplyWrite(ReplySaveRequestDto replySaveRequestDto) {
+		replyRepository.mSave(replySaveRequestDto.getUserId(),replySaveRequestDto.getBoardId(),replySaveRequestDto.getContent()); // 업데이트된 행의 개수를 리턴해줌.  
+		
+	}
 
+	@Transactional
+	public void ReplyDelete(int replyId) {
+		replyRepository.deleteById(replyId);
+		System.out.println("삭제 완료");
+	}
+
+//	@Transactional	//DTO 수정 후
+//	public void ReplyWrite(ReplySaveRequestDto replySaveRequestDto) {
+//		User user = userRepository.findById(replySaveRequestDto.getUserId()).orElseThrow(()-> new IllegalArgumentException("사용자 불러오기 실패 : 사용자 id를 찾을 수 없습니다"));	//영속화 완료
+//		Board board = boardRepository.findById(replySaveRequestDto.getBoardId()).orElseThrow(()-> new IllegalArgumentException("댓글쓰기 실패 : 게시글 id를 찾을 수 없습니다"));	//영속화 완료
+//
+////		Reply reply = new Reply();
+////		reply.update(user, board, replySaveRequestDto.getContent());
+//		
+//		Reply reply = Reply.builder()
+//				.user(user)
+//				.board(board)
+//				.content(replySaveRequestDto.getContent())
+//				.build();
+//		
+//			replyRepository.save(reply);
+//	}
+
+// DTO 수정 전
+//	@Transactional
+//	public void ReplyWrite(User user, int boardId, Reply requestReply) {
+//		Board board = boardRepository.findById(boardId).orElseThrow(()-> new IllegalArgumentException("댓글쓰기 실패"));	//영속화 완료
+//			requestReply.setUser(user);
+//			requestReply.setBoard(board);
+//			
+//			replyRepository.save(requestReply);
+//	}
 
 }

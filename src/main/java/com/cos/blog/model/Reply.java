@@ -1,6 +1,9 @@
 package com.cos.blog.model;
 
 import java.sql.Timestamp;
+
+import javax.swing.text.AbstractDocument.Content;
+
 import org.hibernate.annotations.CreationTimestamp;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,4 +40,17 @@ public class Reply {
 	
 	@CreationTimestamp
 	private Timestamp createDate;
+
+	@Override
+	public String toString() {
+		return "Reply [id=" + id + ", content=" + content + ", user=" + user + ", board=" + board + ", createDate="
+				+ createDate + "]";
+	}
+
+//	public void update(User user,Board board, String content) {
+//		setUser(user);
+//		setBoard(board);
+//		setContent(content);
+//	}
+
 }

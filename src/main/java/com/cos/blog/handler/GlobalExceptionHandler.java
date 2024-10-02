@@ -16,7 +16,7 @@ public class GlobalExceptionHandler {
 	// @ExceptionHandler(value=EmptyResultDataAccessException.class)
 	@ExceptionHandler(value = Exception.class) // 모든 예외에 대한 handler
 	public ResponseDTO<String> handleArgumentException(Exception e) {		//수정 후
-			return new ResponseDTO<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(),e.getMessage());
+			return new ResponseDTO<String>(HttpStatus.INTERNAL_SERVER_ERROR.value(),e.getMessage());	//500 에러
 		}
 	
 	

@@ -72,7 +72,7 @@ public class UserService {
 		String encPassword = encoder.encode(rawPassword);
 		user.setPassword(encPassword);
 		user.setRole(RoleType.USER);
-	//	userRepository.save(user);
+		userRepository.save(user);
 
 	
 	}
